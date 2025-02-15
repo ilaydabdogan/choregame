@@ -8,17 +8,45 @@ import { Toaster, toast } from 'react-hot-toast';
 // Styled Components
 const Container = styled.div`
   max-width: 600px;
+  width: 100%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
 `;
 
 const Card = styled.div`
   background: white;
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+`;
+
+const ChoreItem = styled(motion.div)`
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+
+  @media (max-width: 480px) {
+    & > div:first-of-type {
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+
+    & > div:last-of-type {
+      width: 100%;
+      display: flex;
+      gap: 0.5rem;
+    }
+  }
 `;
 
 const Button = styled.button`
@@ -30,6 +58,7 @@ const Button = styled.button`
   cursor: pointer;
   font-weight: 600;
   transition: all 0.2s;
+  font-size: 0.9rem;
 
   &:hover {
     transform: translateY(-1px);
@@ -42,8 +71,15 @@ const Button = styled.button`
 
   &.game {
     background: #2196F3;
-    font-size: 1.2rem;
-    padding: 12px 24px;
+    font-size: 1.1rem;
+    padding: 10px 20px;
+  }
+
+  @media (max-width: 480px) {
+    flex: 1;
+    min-width: auto;
+    padding: 10px;
+    white-space: nowrap;
   }
 `;
 
@@ -51,12 +87,42 @@ const Input = styled.input`
   padding: 8px 12px;
   border: 2px solid #e0e0e0;
   border-radius: 6px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   transition: border-color 0.2s;
+  width: 100%;
+  max-width: 200px;
+  box-sizing: border-box;
 
   &:focus {
     border-color: #4CAF50;
     outline: none;
+  }
+
+  @media (max-width: 480px) {
+    max-width: none;
+  }
+`;
+
+const AddChoreForm = styled.div`
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+  }
+`;
+
+const Select = styled.select`
+  padding: 8px 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: white;
+  
+  @media (max-width: 480px) {
+    width: 100%;
   }
 `;
 
@@ -334,19 +400,13 @@ function App() {
             <Card>
               <h2>Your Chores</h2>
               {chores.map((chore) => (
-                <motion.div
+                <ChoreItem
                   key={chore.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
                   style={{
-                    padding: '1rem',
-                    marginBottom: '1rem',
-                    borderRadius: '8px',
-                    border: `2px solid ${DIFFICULTY_SETTINGS[chore.difficulty].color}`,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
+                    border: `2px solid ${DIFFICULTY_SETTINGS[chore.difficulty].color}`
                   }}
                 >
                   <div>
@@ -367,32 +427,30 @@ function App() {
                     <Button 
                       className="secondary"
                       onClick={() => handleRemoveChore(chore.id)}
-                      style={{ marginLeft: '0.5rem' }}
                     >
                       Remove
                     </Button>
                   </div>
-                </motion.div>
+                </ChoreItem>
               ))}
 
-              <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem' }}>
+              <AddChoreForm>
                 <Input
                   type="text"
                   placeholder="New chore name"
                   value={newChoreName}
                   onChange={(e) => setNewChoreName(e.target.value)}
                 />
-                <select
+                <Select
                   value={selectedDifficulty}
                   onChange={(e) => setSelectedDifficulty(e.target.value as 'easy' | 'medium' | 'hard')}
-                  style={{ padding: '8px', borderRadius: '6px' }}
                 >
                   <option value="easy">Easy (45s)</option>
                   <option value="medium">Medium (30s)</option>
                   <option value="hard">Hard (15s)</option>
-                </select>
+                </Select>
                 <Button onClick={handleAddChore}>Add Chore</Button>
-              </div>
+              </AddChoreForm>
             </Card>
           </motion.div>
         </AnimatePresence>
