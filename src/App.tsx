@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Confetti from 'react-confetti';
 import { motion, AnimatePresence } from 'framer-motion';
 import styled from '@emotion/styled';
@@ -218,13 +218,13 @@ function App() {
 
   // Timer logic
   useEffect(() => {
-    let countdown: NodeJS.Timeout;
+    let countdown: number;
     if (isPlaying && timer > 0) {
-      countdown = setTimeout(() => setTimer(timer - 1), 1000);
+      countdown = window.setTimeout(() => setTimer(timer - 1), 1000);
     } else if (isPlaying && timer === 0) {
       endGame();
     }
-    return () => clearTimeout(countdown);
+    return () => window.clearTimeout(countdown);
   }, [isPlaying, timer]);
 
   const handleAddChore = () => {
